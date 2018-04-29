@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -22,7 +23,7 @@ import android.view.animation.Animation
 
 
 
-class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
+class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var presenter: CharacterListFragmentContract.Presenter
 
@@ -52,12 +53,11 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
     }
 
     private fun setupRecyclerView() {
+        swipeRefreshCharacterList.setOnRefreshListener(this)
+
         val layoutManager = GridLayoutManager(context, 2)
         recyclerCharacterList.layoutManager = layoutManager
         recyclerCharacterList.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager) {
-            override fun onScrolled(view: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(view, dx, dy)
-            }
 
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                 presenter.getCharacters(page)
@@ -67,7 +67,20 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
 
 
     /*
+        SwipeRefresh Listener
+     */
+    override fun onRefresh() {
+        hideTryAgain()
+        swipeRefreshCharacterList.isRefreshing = true
+        presenter.refresh()
+    }
+
+
+    /*
         View Contract
+     */
+    /**
+     * Add the given results to the characters list
      */
     override fun addCharacters(results: ArrayList<Character>) {
         if (adapter == null) {
@@ -78,6 +91,24 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
         }
     }
 
+    /**
+     * Clear the character list
+     */
+    override fun clearList() {
+        adapter?.removeAll()
+    }
+
+    /**
+     * Refreshes the list of characters
+     */
+    override fun refreshCharacters(results: ArrayList<Character>) {
+        adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
+        recyclerCharacterList.adapter = adapter
+    }
+
+    /**
+     * Show the loading view at the middle of the screen
+     */
     override fun showLoading() {
         lottieLoading.visibility = View.VISIBLE
 
@@ -93,6 +124,9 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
         animator.start()
     }
 
+    /**
+     * Show the loading view on footer of the screen
+     */
     override fun showLoadingFooter() {
         animatorFooter = ValueAnimator.ofFloat(0F, 1F)
         animatorFooter?.duration = 2000
@@ -117,21 +151,34 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
         viewFooterLoading.visibility = View.VISIBLE
     }
 
+    /**
+     *  Hide All loadings on screen
+     */
     override fun hideLoading() {
         lottieLoading.visibility = View.GONE
         lottieLoading.cancelAnimation()
         viewFooterLoading.visibility = View.GONE
         animatorFooter?.end()
+        swipeRefreshCharacterList.isRefreshing = false
     }
 
+    /**
+     * Show the error alert in case of internet error
+     */
     override fun showInternetError() {
         showError(R.string.try_again_internet_error)
     }
 
+    /**
+     * Show the error alert in case of generic error
+     */
     override fun showGenericError() {
         showError(R.string.try_again_generic_error)
     }
 
+    /**
+     * Hide the error alert
+     */
     override fun hideTryAgain() {
         tryAgainSnackBar?.dismiss()
     }
@@ -143,7 +190,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
     private fun showError(message: Int){
         tryAgainSnackBar = Snackbar
                 .make(coordinatorCharacterList, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.try_again_generic_error) {
+                .setAction(R.string.try_again) {
                     presenter.onTryAgainClick()
                 }
 

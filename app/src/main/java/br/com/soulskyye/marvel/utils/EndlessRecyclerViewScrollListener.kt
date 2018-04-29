@@ -10,7 +10,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager
  */
 abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener {
 
-
     companion object {
         const val REQUEST_LIMIT = 20
     }

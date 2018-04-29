@@ -14,6 +14,8 @@ interface CharacterListFragmentContract {
         fun showInternetError()
         fun showGenericError()
         fun hideTryAgain()
+        fun refreshCharacters(results: ArrayList<Character>)
+        fun clearList()
     }
 
     interface Presenter : BaseUiContract.Presenter {
@@ -21,6 +23,7 @@ interface CharacterListFragmentContract {
         fun getCharacters(currentPage: Int)
 
         fun onTryAgainClick()
+        fun refresh()
     }
 
 }

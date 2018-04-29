@@ -54,5 +54,9 @@ class CharacterListAdapter(private var list: ArrayList<Character>,
         notifyItemRangeInserted(list.size - newList.size, list.size - 1)
     }
 
+    fun removeAll() {
+        list.clear()
+        notifyDataSetChanged()
+    }
 
 }
