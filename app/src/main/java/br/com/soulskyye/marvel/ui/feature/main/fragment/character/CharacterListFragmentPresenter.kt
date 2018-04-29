@@ -23,6 +23,8 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
     private var page = 0
     private var currentAction = Action.GET_CHARACTERS
 
+    private var currentSearchTerm = ""
+
     private val compositeDisposable by lazy {
         CompositeDisposable()
     }
@@ -72,6 +74,23 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
         compositeDisposable.add(disposable)
     }
 
+    override fun performSearch(query: String?) {
+        currentSearchTerm = ""
+        query?.let {
+            if(it.isNotBlank()) {
+                currentSearchTerm = it
+                view?.searchTerm(query)
+            } else {
+                currentSearchTerm = ""
+                view?.searchTerm(currentSearchTerm)
+            }
+        }
+    }
+
+    override fun canLoadMore(): Boolean {
+        return currentSearchTerm.isBlank()
+    }
+
     override fun onTryAgainClick() {
         view?.hideTryAgain()
 
@@ -98,7 +117,7 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
             }
             list?.addAll(response.data?.results!!)
 
-            view?.addCharacters(response.data?.results!!)
+            view?.addCharacters(response.data?.results!!, currentSearchTerm.isNotEmpty())
         }
     }
 

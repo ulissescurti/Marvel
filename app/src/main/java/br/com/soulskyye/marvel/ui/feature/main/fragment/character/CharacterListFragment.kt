@@ -8,9 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import br.com.soulskyye.marvel.R
 import br.com.soulskyye.marvel.data.DataManager
 import br.com.soulskyye.marvel.data.model.Character
@@ -20,7 +18,12 @@ import br.com.soulskyye.marvel.utils.EndlessRecyclerViewScrollListener
 import br.com.soulskyye.marvel.utils.ScreenUtils
 import kotlinx.android.synthetic.main.fragment_character_list.*
 import android.view.animation.Animation
-
+import android.support.v4.view.MenuItemCompat.getActionView
+import android.content.Context.SEARCH_SERVICE
+import android.app.SearchManager
+import android.content.Context
+import android.support.v7.widget.SearchView
+import android.util.Log
 
 
 class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, SwipeRefreshLayout.OnRefreshListener {
@@ -33,8 +36,11 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
 
     private var tryAgainSnackBar: Snackbar? = null
 
+    private var searchView: SearchView? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_character_list, container, false)
     }
 
@@ -45,6 +51,33 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
 
         presenter = CharacterListFragmentPresenter(this, DataManager(ApiManager()))
         presenter.start()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.main_menu, menu)
+
+        val manager = activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+
+        searchView?.setSearchableInfo(manager.getSearchableInfo(activity?.componentName))
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+
+                presenter.performSearch(query)
+                return true
+            }
+
+        })
+
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onDestroy() {
@@ -62,6 +95,10 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                 presenter.getCharacters(page)
             }
+
+            override fun canLoadMore(): Boolean {
+                return presenter.canLoadMore()
+            }
         })
     }
 
@@ -71,6 +108,9 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
      */
     override fun onRefresh() {
         hideTryAgain()
+        searchView?.setQuery("", true)
+        searchView?.clearFocus()
+        searchView?.onActionViewCollapsed()
         swipeRefreshCharacterList.isRefreshing = true
         presenter.refresh()
     }
@@ -82,12 +122,12 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
     /**
      * Add the given results to the characters list
      */
-    override fun addCharacters(results: ArrayList<Character>) {
+    override fun addCharacters(results: ArrayList<Character>, isFiltering: Boolean) {
         if (adapter == null) {
             adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
             recyclerCharacterList.adapter = adapter
         } else {
-            adapter?.addItems(results)
+            adapter?.addItems(results, isFiltering)
         }
     }
 
@@ -96,6 +136,13 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
      */
     override fun clearList() {
         adapter?.removeAll()
+    }
+
+    /**
+     * Search the given term
+     */
+    override fun searchTerm(query: String?) {
+        adapter?.filter?.filter(query)
     }
 
     /**
@@ -141,7 +188,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
             hsv[0] = 360 * animation.animatedFraction
 
             runColor = Color.HSVToColor(hsv)
-            viewFooterLoading.setBackgroundColor(runColor)
+            viewFooterLoading?.setBackgroundColor(runColor)
         }
 
         animatorFooter?.repeatCount = Animation.INFINITE

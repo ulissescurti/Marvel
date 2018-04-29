@@ -7,7 +7,7 @@ interface CharacterListFragmentContract {
 
     interface View : BaseUiContract.View {
 
-        fun addCharacters(results: ArrayList<Character>)
+        fun addCharacters(results: ArrayList<Character>, isFiltering: Boolean)
         fun showLoading()
         fun hideLoading()
         fun showLoadingFooter()
@@ -16,6 +16,7 @@ interface CharacterListFragmentContract {
         fun hideTryAgain()
         fun refreshCharacters(results: ArrayList<Character>)
         fun clearList()
+        fun searchTerm(query: String?)
     }
 
     interface Presenter : BaseUiContract.Presenter {
@@ -24,6 +25,8 @@ interface CharacterListFragmentContract {
 
         fun onTryAgainClick()
         fun refresh()
+        fun performSearch(query: String?)
+        fun canLoadMore(): Boolean
     }
 
 }
