@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Marvel</string>
+    <string name="characters">Personagens</string>
+    <string name="favorites">Favoritos</string>
+</resources>
