@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private fun setupActionBar(){
         setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.app_name)
+        supportActionBar?.setIcon(R.drawable.ic_launcher_foreground)
     }
 
     private fun setupTabLayout(){
