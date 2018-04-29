@@ -8,9 +8,11 @@ import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 
 /**
@@ -78,6 +80,22 @@ class ApiManager: ApiService {
         val gson = GsonBuilder()
                 .create()
         return GsonConverterFactory.create(gson)
+    }
+
+
+    fun asRetrofitException(throwable: Throwable): RetrofitException {
+        // We had non-200 http error
+        if (throwable is HttpException) {
+            val response = throwable.response()
+            return RetrofitException.httpError(response.raw().request().url().toString(), response, retrofit)
+        }
+        // A network error happened
+        return if (throwable is IOException) {
+            RetrofitException.networkError(throwable)
+        } else RetrofitException.unexpectedError(throwable)
+
+        // We don't know what happened. We need to simply convert to an unknown error
+
     }
 
     /**

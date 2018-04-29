@@ -1,4 +1,4 @@
-package br.com.soulskyye.marvel.ui.main.fragment.favorite
+package br.com.soulskyye.marvel.ui.feature.main.fragment.favorite
 
 class FavoriteListFragmentPresenter(private var view: FavoriteListFragmentContract.View?) : FavoriteListFragmentContract.Presenter {
 

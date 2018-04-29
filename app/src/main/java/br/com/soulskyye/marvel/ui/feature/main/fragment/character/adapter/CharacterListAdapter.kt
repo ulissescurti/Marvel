@@ -1,4 +1,4 @@
-package br.com.soulskyye.marvel.ui.main.fragment.character.adapter
+package br.com.soulskyye.marvel.ui.feature.main.fragment.character.adapter
 
 import android.content.Context
 import android.support.v7.widget.AppCompatImageView
@@ -6,11 +6,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import br.com.soulskyye.marvel.R
 import br.com.soulskyye.marvel.data.model.Character
-import br.com.soulskyye.marvel.ui.main.fragment.character.CharacterListFragmentContract
+import br.com.soulskyye.marvel.ui.feature.main.fragment.character.CharacterListFragmentContract
 import br.com.soulskyye.marvel.utils.loadImage
 import br.com.soulskyye.marvel.utils.setPaletteColor
 

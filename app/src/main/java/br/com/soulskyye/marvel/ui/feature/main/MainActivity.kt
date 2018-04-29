@@ -1,9 +1,9 @@
-package br.com.soulskyye.marvel.ui.main
+package br.com.soulskyye.marvel.ui.feature.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import br.com.soulskyye.marvel.R
-import br.com.soulskyye.marvel.ui.main.adapter.ViewPagerAdapter
+import br.com.soulskyye.marvel.ui.feature.main.adapter.ViewPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View {

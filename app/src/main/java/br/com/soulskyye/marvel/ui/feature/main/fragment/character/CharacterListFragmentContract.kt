@@ -1,4 +1,4 @@
-package br.com.soulskyye.marvel.ui.main.fragment.character
+package br.com.soulskyye.marvel.ui.feature.main.fragment.character
 
 import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.ui.base.BaseUiContract
@@ -11,12 +11,16 @@ interface CharacterListFragmentContract {
         fun showLoading()
         fun hideLoading()
         fun showLoadingFooter()
+        fun showInternetError()
+        fun showGenericError()
+        fun hideTryAgain()
     }
 
     interface Presenter : BaseUiContract.Presenter {
 
         fun getCharacters(currentPage: Int)
 
+        fun onTryAgainClick()
     }
 
 }

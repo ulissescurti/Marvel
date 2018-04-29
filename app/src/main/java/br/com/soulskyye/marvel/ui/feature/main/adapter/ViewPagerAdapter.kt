@@ -1,12 +1,12 @@
-package br.com.soulskyye.marvel.ui.main.adapter
+package br.com.soulskyye.marvel.ui.feature.main.adapter
 
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import br.com.soulskyye.marvel.R
-import br.com.soulskyye.marvel.ui.main.fragment.character.CharacterListFragment
-import br.com.soulskyye.marvel.ui.main.fragment.favorite.FavoriteListFragment
+import br.com.soulskyye.marvel.ui.feature.main.fragment.character.CharacterListFragment
+import br.com.soulskyye.marvel.ui.feature.main.fragment.favorite.FavoriteListFragment
 import java.util.*
 
 class ViewPagerAdapter(private val context: Context,

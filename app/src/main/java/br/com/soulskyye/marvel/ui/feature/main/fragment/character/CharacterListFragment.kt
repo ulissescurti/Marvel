@@ -1,10 +1,9 @@
-package br.com.soulskyye.marvel.ui.main.fragment.character
+package br.com.soulskyye.marvel.ui.feature.main.fragment.character
 
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,7 +14,7 @@ import br.com.soulskyye.marvel.R
 import br.com.soulskyye.marvel.data.DataManager
 import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.data.network.ApiManager
-import br.com.soulskyye.marvel.ui.main.fragment.character.adapter.CharacterListAdapter
+import br.com.soulskyye.marvel.ui.feature.main.fragment.character.adapter.CharacterListAdapter
 import br.com.soulskyye.marvel.utils.EndlessRecyclerViewScrollListener
 import br.com.soulskyye.marvel.utils.ScreenUtils
 import kotlinx.android.synthetic.main.fragment_character_list.*
@@ -26,9 +25,13 @@ import android.view.animation.Animation
 class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
 
     private lateinit var presenter: CharacterListFragmentContract.Presenter
+
     private var adapter: CharacterListAdapter? = null
 
     private var animatorFooter: ValueAnimator? = null
+
+    private var tryAgainSnackBar: Snackbar? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_character_list, container, false)
@@ -121,4 +124,29 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View {
         animatorFooter?.end()
     }
 
+    override fun showInternetError() {
+        showError(R.string.try_again_internet_error)
+    }
+
+    override fun showGenericError() {
+        showError(R.string.try_again_generic_error)
+    }
+
+    override fun hideTryAgain() {
+        tryAgainSnackBar?.dismiss()
+    }
+
+
+    /*
+        Util
+     */
+    private fun showError(message: Int){
+        tryAgainSnackBar = Snackbar
+                .make(coordinatorCharacterList, message, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.try_again_generic_error) {
+                    presenter.onTryAgainClick()
+                }
+
+        tryAgainSnackBar?.show()
+    }
 }

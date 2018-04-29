@@ -1,4 +1,4 @@
-package br.com.soulskyye.marvel.ui.main.fragment.favorite
+package br.com.soulskyye.marvel.ui.feature.main.fragment.favorite
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

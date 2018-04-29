@@ -1,4 +1,4 @@
-package br.com.soulskyye.marvel.ui.main
+package br.com.soulskyye.marvel.ui.feature.main
 
 class MainActivityPresenter(private var view: MainActivityContract.View?) : MainActivityContract.Presenter {
 

@@ -2,4 +2,8 @@
     <string name="app_name">Marvel</string>
     <string name="characters">Characters</string>
     <string name="favorites">Favorites</string>
+
+    <string name="try_again">TRY AGAIN</string>
+    <string name="try_again_internet_error">You must be connected to the internet to see the characters.</string>
+    <string name="try_again_generic_error">Something happened while we were looking for the characters.</string>
 </resources>
