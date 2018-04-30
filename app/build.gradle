@@ -4,14 +4,20 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'realm-android'
+
 android {
     compileSdkVersion 27
     defaultConfig {
+        applicationId 'io.realm.examples.kotlin'
         applicationId "br.com.soulskyye.marvel"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,6 +36,10 @@ android {
             buildConfigField("String", "PRIVATE_API_KEY", rootProject.ext.marvelPrivateApiKey)
         }
     }
+}
+
+realm {
+    syncEnabled = true
 }
 
 dependencies {
@@ -64,6 +74,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:2.5.4'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation "android.arch.core:core-testing:1.1.1"
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

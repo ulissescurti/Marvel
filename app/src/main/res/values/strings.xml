@@ -6,4 +6,6 @@
     <string name="try_again">TRY AGAIN</string>
     <string name="try_again_internet_error">You must be connected to the internet to see the characters.</string>
     <string name="try_again_generic_error">Something happened while we were looking for the characters.</string>
+
+    <string name="empty_favorites_message">Still do not have any favorite character? What a shame :(.</string>
 </resources>

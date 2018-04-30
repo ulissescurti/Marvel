@@ -11,13 +11,14 @@ import android.widget.Filterable
 import android.widget.TextView
 import br.com.soulskyye.marvel.R
 import br.com.soulskyye.marvel.data.model.Character
+import br.com.soulskyye.marvel.ui.feature.main.fragment.base.BaseCharacterAdapterContract
 import br.com.soulskyye.marvel.ui.feature.main.fragment.character.CharacterListFragmentContract
 import br.com.soulskyye.marvel.utils.loadImage
 import br.com.soulskyye.marvel.utils.setPaletteColor
 
 class CharacterListAdapter(var list: ArrayList<Character>,
                            private var context: Context?,
-                           private var presenter: CharacterListFragmentContract.Presenter,
+                           private var presenter: BaseCharacterAdapterContract.Presenter,
                            private var screenWidth: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
 
@@ -49,6 +50,22 @@ class CharacterListAdapter(var list: ArrayList<Character>,
         viewHolder.view.setOnClickListener {
             //            presenter.onListItemClick(position, it.findViewById(R.id.imageViewCharacter))
         }
+
+        if(character.isFavorite) {
+            viewHolder.imageViewFavorite.setImageResource(R.drawable.start_filled)
+        } else {
+            viewHolder.imageViewFavorite.setImageResource(R.drawable.star_bordered)
+        }
+
+        viewHolder.imageViewFavorite.tag = character
+        viewHolder.imageViewFavorite.setOnClickListener {
+            if(!character.isFavorite) {
+                (it as AppCompatImageView).setImageResource(R.drawable.start_filled)
+            } else {
+                (it as AppCompatImageView).setImageResource(R.drawable.star_bordered)
+            }
+            presenter.onFavoriteClick(it.tag as Character)
+        }
     }
 
     override fun getFilter(): Filter {
@@ -62,6 +79,7 @@ class CharacterListAdapter(var list: ArrayList<Character>,
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         var textViewName: TextView = view.findViewById(R.id.textViewCharacterName)
         var imageViewCharacter: AppCompatImageView = view.findViewById(R.id.imageViewCharacter)
+        var imageViewFavorite: AppCompatImageView = view.findViewById(R.id.imageViewFavoriteStar)
     }
 
     fun addItems(newList: ArrayList<Character>, isFiltering: Boolean) {

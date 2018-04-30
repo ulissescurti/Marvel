@@ -5,6 +5,7 @@ import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.data.network.RetrofitException
 import br.com.soulskyye.marvel.data.network.model.CharactersResponse
 import br.com.soulskyye.marvel.utils.EndlessRecyclerViewScrollListener.Companion.REQUEST_LIMIT
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -48,7 +49,7 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
             view?.showLoadingFooter()
         }
 
-        val disposable = dataManager.getCharacters(REQUEST_LIMIT, currentPage*REQUEST_LIMIT)!!
+        val disposable = dataManager.getCharacters(REQUEST_LIMIT, currentPage*REQUEST_LIMIT)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onFetchCharactersSuccess, this::onFetchCharactersError)
@@ -104,20 +105,45 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
         }
     }
 
+    override fun onFavoriteClick(character: Character) {
+        character.isFavorite = !character.isFavorite
+        if(character.isFavorite){
+            dataManager.insertFavorite(character)
+        } else {
+            dataManager.deleteFavorite(character)
+        }
+    }
+
 
     /*
-            Callbacks
-         */
+                Callbacks
+             */
     private fun onFetchCharactersSuccess(response: CharactersResponse){
         view?.hideLoading()
 
         if(response.data?.results?.isNotEmpty()!!){
-            if(list == null){
-                list = ArrayList()
-            }
-            list?.addAll(response.data?.results!!)
 
-            view?.addCharacters(response.data?.results!!, currentSearchTerm.isNotEmpty())
+            val disposable = Observable.just(response.data?.results)
+                    .flatMapIterable { character -> character }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMapSingle { character ->
+                        dataManager.getFavorite(character)
+                    }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .toList()
+                    .subscribe{
+                        t1, t2 -> run {
+                            if (list == null) {
+                                list = ArrayList()
+                            }
+                            list?.addAll(response.data?.results!!)
+                            view?.addCharacters(response.data?.results!!, currentSearchTerm.isNotEmpty())
+                        }
+                    }
+
+            compositeDisposable.add(disposable)
+
         }
     }
 
@@ -137,9 +163,28 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
         view?.hideLoading()
 
         if(response.data?.results?.isNotEmpty()!!){
-            list?.addAll(response.data?.results!!)
 
-            view?.refreshCharacters(response.data?.results!!)
+            val disposable = Observable.just(response.data?.results)
+                    .flatMapIterable { character -> character }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMapSingle { character ->
+                        dataManager.getFavorite(character)
+                    }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .toList()
+                    .subscribe{
+                        t1, t2 -> run {
+                            if (list == null) {
+                                list = ArrayList()
+                            }
+                            list?.addAll(response.data?.results!!)
+                            view?.refreshCharacters(response.data?.results!!)
+                        }
+                    }
+
+            compositeDisposable.add(disposable)
+
         }
     }
 

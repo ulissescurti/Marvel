@@ -1,6 +1,8 @@
 package br.com.soulskyye.marvel.ui.feature.main.fragment.character
 
 import android.animation.ValueAnimator
+import android.app.SearchManager
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -8,22 +10,18 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.view.*
+import android.view.animation.Animation
 import br.com.soulskyye.marvel.R
 import br.com.soulskyye.marvel.data.DataManager
+import br.com.soulskyye.marvel.data.db.DatabaseManager
 import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.data.network.ApiManager
 import br.com.soulskyye.marvel.ui.feature.main.fragment.character.adapter.CharacterListAdapter
 import br.com.soulskyye.marvel.utils.EndlessRecyclerViewScrollListener
 import br.com.soulskyye.marvel.utils.ScreenUtils
 import kotlinx.android.synthetic.main.fragment_character_list.*
-import android.view.animation.Animation
-import android.support.v4.view.MenuItemCompat.getActionView
-import android.content.Context.SEARCH_SERVICE
-import android.app.SearchManager
-import android.content.Context
-import android.support.v7.widget.SearchView
-import android.util.Log
 
 
 class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, SwipeRefreshLayout.OnRefreshListener {
@@ -49,7 +47,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
 
         setupRecyclerView()
 
-        presenter = CharacterListFragmentPresenter(this, DataManager(ApiManager()))
+        presenter = CharacterListFragmentPresenter(this, DataManager(ApiManager(), DatabaseManager()))
         presenter.start()
     }
 
@@ -180,7 +178,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
 
         val hsv: FloatArray
         var runColor: Int
-        val hue = 0
+
         hsv = FloatArray(3)
         hsv[1] = 1f
         hsv[2] = 1f
@@ -234,10 +232,13 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
     /*
         Util
      */
-    private fun showError(message: Int){
+    private fun showError(message: Int) {
         tryAgainSnackBar = Snackbar
                 .make(coordinatorCharacterList, message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.try_again) {
+                    searchView?.setQuery("", true)
+                    searchView?.clearFocus()
+                    searchView?.onActionViewCollapsed()
                     presenter.onTryAgainClick()
                 }
 

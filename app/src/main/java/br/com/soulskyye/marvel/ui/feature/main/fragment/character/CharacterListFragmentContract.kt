@@ -2,6 +2,7 @@ package br.com.soulskyye.marvel.ui.feature.main.fragment.character
 
 import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.ui.base.BaseUiContract
+import br.com.soulskyye.marvel.ui.feature.main.fragment.base.BaseCharacterAdapterContract
 
 interface CharacterListFragmentContract {
 
@@ -19,7 +20,7 @@ interface CharacterListFragmentContract {
         fun searchTerm(query: String?)
     }
 
-    interface Presenter : BaseUiContract.Presenter {
+    interface Presenter : BaseUiContract.Presenter, BaseCharacterAdapterContract.Presenter {
 
         fun getCharacters(currentPage: Int)
 

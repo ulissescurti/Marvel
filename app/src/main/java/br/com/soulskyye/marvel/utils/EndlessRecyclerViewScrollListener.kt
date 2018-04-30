@@ -37,10 +37,9 @@ abstract class EndlessRecyclerViewScrollListener(layoutManager: GridLayoutManage
             return
         }
 
-        var lastVisibleItemPosition = 0
         val totalItemCount = mLayoutManager.itemCount
 
-        lastVisibleItemPosition = (mLayoutManager as GridLayoutManager).findLastVisibleItemPosition()
+        val lastVisibleItemPosition = (mLayoutManager as GridLayoutManager).findLastVisibleItemPosition()
 
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
