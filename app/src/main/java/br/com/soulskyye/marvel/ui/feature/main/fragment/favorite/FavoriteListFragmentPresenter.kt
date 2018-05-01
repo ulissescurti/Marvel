@@ -1,5 +1,6 @@
 package br.com.soulskyye.marvel.ui.feature.main.fragment.favorite
 
+import android.view.View
 import br.com.soulskyye.marvel.data.DataManager
 import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.data.network.model.CharactersResponse
@@ -51,6 +52,10 @@ class FavoriteListFragmentPresenter(private var view: FavoriteListFragmentContra
         } else {
             dataManager.deleteFavorite(character)
         }
+    }
+
+    override fun onListItemClick(character: Character, imageView: View) {
+        view?.startDetailActivity(character, imageView)
     }
 
 

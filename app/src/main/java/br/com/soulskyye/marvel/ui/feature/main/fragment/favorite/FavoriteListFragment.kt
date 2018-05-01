@@ -1,7 +1,11 @@
 package br.com.soulskyye.marvel.ui.feature.main.fragment.favorite
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v4.util.Pair
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -12,6 +16,7 @@ import br.com.soulskyye.marvel.data.DataManager
 import br.com.soulskyye.marvel.data.db.DatabaseManager
 import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.data.network.ApiManager
+import br.com.soulskyye.marvel.ui.feature.detail.CharacterDetailActivity
 import br.com.soulskyye.marvel.ui.feature.main.fragment.character.adapter.CharacterListAdapter
 import br.com.soulskyye.marvel.utils.ScreenUtils
 import kotlinx.android.synthetic.main.fragment_favorite_list.*
@@ -82,4 +87,14 @@ class FavoriteListFragment : Fragment(), FavoriteListFragmentContract.View, Swip
         recyclerFavoriteList.adapter = adapter
     }
 
+    override fun startDetailActivity(character: Character, imageView: android.view.View) {
+        val intent = CharacterDetailActivity.newIntent(context!!, character)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            val p1 = Pair.create(imageView, getString(R.string.transition_character_image))
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity, p1)
+            startActivity(intent, options.toBundle())
+        } else {
+            startActivity(intent)
+        }
+    }
 }

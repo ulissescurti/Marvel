@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         super.onDestroy()
     }
 
-
     private fun setupActionBar(){
         setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.app_name)

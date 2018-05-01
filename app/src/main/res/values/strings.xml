@@ -8,4 +8,5 @@
     <string name="try_again_generic_error">Something happened while we were looking for the characters.</string>
 
     <string name="empty_favorites_message">Still do not have any favorite character? What a shame :(.</string>
+    <string name="transition_character_image">characterImage</string>
 </resources>

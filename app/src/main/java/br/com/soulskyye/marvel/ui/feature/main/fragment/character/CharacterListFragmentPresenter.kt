@@ -1,5 +1,6 @@
 package br.com.soulskyye.marvel.ui.feature.main.fragment.character
 
+import android.view.View
 import br.com.soulskyye.marvel.data.DataManager
 import br.com.soulskyye.marvel.data.model.Character
 import br.com.soulskyye.marvel.data.network.RetrofitException
@@ -114,10 +115,14 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
         }
     }
 
+    override fun onListItemClick(character: Character, imageView: View) {
+        view?.startDetailActivity(character, imageView)
+    }
+
 
     /*
-                Callbacks
-             */
+                    Callbacks
+                 */
     private fun onFetchCharactersSuccess(response: CharactersResponse){
         view?.hideLoading()
 

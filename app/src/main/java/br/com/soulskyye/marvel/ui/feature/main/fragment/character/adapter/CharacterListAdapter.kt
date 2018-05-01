@@ -11,14 +11,13 @@ import android.widget.Filterable
 import android.widget.TextView
 import br.com.soulskyye.marvel.R
 import br.com.soulskyye.marvel.data.model.Character
-import br.com.soulskyye.marvel.ui.feature.main.fragment.base.BaseCharacterAdapterContract
-import br.com.soulskyye.marvel.ui.feature.main.fragment.character.CharacterListFragmentContract
+import br.com.soulskyye.marvel.ui.feature.main.fragment.base.BaseCharacterContract
 import br.com.soulskyye.marvel.utils.loadImage
 import br.com.soulskyye.marvel.utils.setPaletteColor
 
 class CharacterListAdapter(var list: ArrayList<Character>,
                            private var context: Context?,
-                           private var presenter: BaseCharacterAdapterContract.Presenter,
+                           private var presenter: BaseCharacterContract.Presenter,
                            private var screenWidth: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
 
@@ -47,12 +46,13 @@ class CharacterListAdapter(var list: ArrayList<Character>,
                 })
         viewHolder.textViewName.text = character.name
 
+        viewHolder.view.tag = character
         viewHolder.view.setOnClickListener {
-            //            presenter.onListItemClick(position, it.findViewById(R.id.imageViewCharacter))
+            presenter.onListItemClick(it.tag as Character, it.findViewById(R.id.imageViewCharacter))
         }
 
         if(character.isFavorite) {
-            viewHolder.imageViewFavorite.setImageResource(R.drawable.start_filled)
+            viewHolder.imageViewFavorite.setImageResource(R.drawable.star_filled)
         } else {
             viewHolder.imageViewFavorite.setImageResource(R.drawable.star_bordered)
         }
@@ -60,7 +60,7 @@ class CharacterListAdapter(var list: ArrayList<Character>,
         viewHolder.imageViewFavorite.tag = character
         viewHolder.imageViewFavorite.setOnClickListener {
             if(!character.isFavorite) {
-                (it as AppCompatImageView).setImageResource(R.drawable.start_filled)
+                (it as AppCompatImageView).setImageResource(R.drawable.star_filled)
             } else {
                 (it as AppCompatImageView).setImageResource(R.drawable.star_bordered)
             }
