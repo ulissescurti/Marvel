@@ -138,7 +138,7 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .toList()
                     .subscribe{
-                        t1, t2 -> run {
+                        _, _ -> run {
                             if (list == null) {
                                 list = ArrayList()
                             }
@@ -179,7 +179,7 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .toList()
                     .subscribe{
-                        t1, t2 -> run {
+                        _, _ -> run {
                             if (list == null) {
                                 list = ArrayList()
                             }

@@ -1,5 +1,6 @@
 package br.com.soulskyye.marvelheroes.ui.detail
 
+import br.com.soulskyye.marvel.data.model.Item
 import br.com.soulskyye.marvel.data.model.Thumbnail
 import br.com.soulskyye.marvel.ui.base.BaseUiContract
 
@@ -20,6 +21,10 @@ interface CharacterDetailActivityContract {
         fun showDescription(description: String)
         fun showFavoriteIcon()
         fun showFavoriteEmptyIcon()
+        fun showComics(items: List<Item>)
+        fun hideComics()
+        fun showSeries(items: List<Item>)
+        fun hideSeries()
 
     }
 

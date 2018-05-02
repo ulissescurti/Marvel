@@ -11,4 +11,6 @@ open class Character(@PrimaryKey @NonNull @SerializedName("id") var id: String =
                      @SerializedName("name") var name: String = "",
                      @SerializedName("description") var description: String = "",
                      @SerializedName("thumbnail") var thumbnail: Thumbnail? = null,
+                     @SerializedName("comics") var comics: Items? = null,
+                     @SerializedName("series") var series: Items? = null,
                      @Ignore var isFavorite: Boolean = false) : RealmObject(), Serializable

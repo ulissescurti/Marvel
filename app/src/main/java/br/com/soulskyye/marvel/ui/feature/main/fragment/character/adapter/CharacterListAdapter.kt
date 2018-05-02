@@ -41,6 +41,7 @@ class CharacterListAdapter(var list: ArrayList<Character>,
         val viewHolder = holder as ViewHolder
 
         viewHolder.imageViewCharacter.loadImage("${character.thumbnail?.path}.${character.thumbnail?.extension}",
+                R.drawable.placeholder_character,
                 {
                     viewHolder.textViewName.setPaletteColor(it)
                 })

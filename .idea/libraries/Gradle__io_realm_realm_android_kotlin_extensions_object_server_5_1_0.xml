@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: io.realm:realm-android-kotlin-extensions-object-server-5.1.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/realm-android-kotlin-extensions-object-server-5.1.0.aar/d35ba9319e359098e183abb0b7b8b84e/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/realm-android-kotlin-extensions-object-server-5.1.0.aar/d35ba9319e359098e183abb0b7b8b84e/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/realm-android-kotlin-extensions-object-server-5.1.0.aar/48d5298e82822299e46c0288a657df27/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/realm-android-kotlin-extensions-object-server-5.1.0.aar/48d5298e82822299e46c0288a657df27/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

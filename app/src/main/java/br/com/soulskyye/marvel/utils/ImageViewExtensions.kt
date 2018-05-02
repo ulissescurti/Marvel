@@ -11,12 +11,12 @@ import java.lang.Exception
 /**
  * Method to load image into ImageView using picasso
  */
-fun AppCompatImageView.loadImage(url: String?, callback: (Bitmap) -> Unit) {
+fun AppCompatImageView.loadImage(url: String?, placeholder: Int, callback: (Bitmap) -> Unit) {
     if (url != null && url.isNotBlank()) {
         Picasso.get()
                 .load(url)
-                .placeholder(R.drawable.placeholder_character)
-                .error(R.drawable.placeholder_character)
+                .placeholder(placeholder)
+                .error(placeholder)
                 .into(this, object : Callback {
                     override fun onSuccess() {
                         callback((drawable as BitmapDrawable).bitmap)
@@ -27,6 +27,6 @@ fun AppCompatImageView.loadImage(url: String?, callback: (Bitmap) -> Unit) {
                     }
                 })
     } else {
-        Picasso.get().load(R.drawable.placeholder_character)
+        Picasso.get().load(placeholder)
     }
 }

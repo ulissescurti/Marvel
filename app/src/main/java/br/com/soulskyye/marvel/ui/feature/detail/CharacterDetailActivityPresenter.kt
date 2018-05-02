@@ -15,7 +15,16 @@ class CharacterDetailActivityPresenter(private var view: CharacterDetailActivity
         view?.showImage(character.thumbnail)
         view?.showName(character.name)
         view?.showDescription(character.description)
-
+        if(character.comics?.items?.isNotEmpty()!!){
+            view?.showComics(character.comics?.items!!)
+        } else {
+            view?.hideComics()
+        }
+        if(character.series?.items?.isNotEmpty()!!){
+            view?.showSeries(character.series?.items!!)
+        } else {
+            view?.hideSeries()
+        }
     }
 
     override fun onDestroy() {

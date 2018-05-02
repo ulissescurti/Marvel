@@ -5,19 +5,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import br.com.soulskyye.marvel.R
 import br.com.soulskyye.marvel.data.DataManager
 import br.com.soulskyye.marvel.data.db.DatabaseManager
 import br.com.soulskyye.marvel.data.model.Character
+import br.com.soulskyye.marvel.data.model.Item
 import br.com.soulskyye.marvel.data.model.Thumbnail
 import br.com.soulskyye.marvel.data.network.ApiManager
+import br.com.soulskyye.marvel.ui.feature.detail.adapter.DetailItemListAdapter
 import br.com.soulskyye.marvel.utils.loadImage
 import br.com.soulskyye.marvel.utils.setPaletteColor
 import br.com.soulskyye.marvelheroes.ui.detail.CharacterDetailActivityContract
 import br.com.soulskyye.marvelheroes.ui.detail.CharacterDetailActivityPresenter
 import kotlinx.android.synthetic.main.activity_character_detail.*
+import kotlinx.android.synthetic.main.fragment_character_list.*
 
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailActivityContract.View {
@@ -93,9 +99,11 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailActivityCont
         View Contract
      */
     override fun showImage(thumbnail: Thumbnail?) {
-        imageViewCharacterDetail.loadImage("${thumbnail?.path}.${thumbnail?.extension}", {
-            scrollViewCharacterDetail.setPaletteColor(it)
-        })
+        imageViewCharacterDetail.loadImage("${thumbnail?.path}.${thumbnail?.extension}",
+                R.drawable.placeholder_character,
+                {
+                    scrollViewCharacterDetail.setPaletteColor(it)
+                })
     }
 
     override fun showName(name: String) {
@@ -115,5 +123,27 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailActivityCont
     override fun showFavoriteEmptyIcon() {
         val item = menu?.findItem(R.id.action_favorite)
         item?.icon = ContextCompat.getDrawable(baseContext, R.drawable.star_bordered_white)
+    }
+
+    override fun showComics(items: List<Item>) {
+        val layoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewComics.layoutManager = layoutManager
+        recyclerViewComics.adapter = DetailItemListAdapter(items as ArrayList<Item>)
+    }
+
+    override fun hideComics() {
+        textViewCharacterDetailComics.visibility = View.GONE
+        recyclerViewComics.visibility = View.GONE
+    }
+
+    override fun showSeries(items: List<Item>) {
+        val layoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewSeries.layoutManager = layoutManager
+        recyclerViewSeries.adapter = DetailItemListAdapter(items as ArrayList<Item>)
+    }
+
+    override fun hideSeries() {
+        textViewCharacterDetailSeries.visibility = View.GONE
+        recyclerViewSeries.visibility = View.GONE
     }
 }
