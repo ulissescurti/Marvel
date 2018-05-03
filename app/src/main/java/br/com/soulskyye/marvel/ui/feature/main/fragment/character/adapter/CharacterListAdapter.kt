@@ -18,7 +18,8 @@ import br.com.soulskyye.marvel.utils.setPaletteColor
 class CharacterListAdapter(var list: ArrayList<Character>,
                            private var context: Context?,
                            private var presenter: BaseCharacterContract.Presenter,
-                           private var screenWidth: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+                           private var screenWidth: Int,
+                           private var isFromFavorite: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
 
     private var filterList = list
@@ -49,7 +50,12 @@ class CharacterListAdapter(var list: ArrayList<Character>,
 
         viewHolder.view.tag = character
         viewHolder.view.setOnClickListener {
-            presenter.onListItemClick(it.tag as Character, it.findViewById(R.id.imageViewCharacter))
+            val char = it.tag as Character
+            if(isFromFavorite) {
+                presenter.onListItemClick(char, null, "${char.thumbnail?.path}.${char.thumbnail?.extension}", it.findViewById(R.id.imageViewCharacter))
+            } else {
+                presenter.onListItemClick(null, char.id, "${char.thumbnail?.path}.${char.thumbnail?.extension}", it.findViewById(R.id.imageViewCharacter))
+            }
         }
 
         if(character.isFavorite) {

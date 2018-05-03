@@ -127,7 +127,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
      */
     override fun addCharacters(results: ArrayList<Character>, isFiltering: Boolean) {
         if (adapter == null) {
-            adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
+            adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager), false)
             recyclerCharacterList.adapter = adapter
         } else {
             adapter?.addItems(results, isFiltering)
@@ -152,7 +152,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
      * Refreshes the list of characters
      */
     override fun refreshCharacters(results: ArrayList<Character>) {
-        adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
+        adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager), false)
         recyclerCharacterList.adapter = adapter
     }
 
@@ -223,7 +223,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
      * Show the error alert in case of generic error
      */
     override fun showGenericError() {
-        showError(R.string.try_again_generic_error)
+        showError(R.string.try_again_list_generic_error)
     }
 
     /**
@@ -233,8 +233,8 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
         tryAgainSnackBar?.dismiss()
     }
 
-    override fun startDetailActivity(character: Character, imageView: android.view.View) {
-        val intent = CharacterDetailActivity.newIntent(context!!, character)
+    override fun startDetailActivity(character: Character?, characterId: String?, characterImage: String, imageView: android.view.View) {
+        val intent = CharacterDetailActivity.newIntent(context!!, characterId, characterImage, character)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val p1 = Pair.create(imageView, getString(R.string.transition_character_image))
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity, p1)

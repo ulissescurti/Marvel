@@ -5,4 +5,4 @@ import io.realm.RealmObject
 import java.io.Serializable
 
 open class Item(@SerializedName("name") var name: String = "",
-                @SerializedName("resourceURI") var image: String = "") : RealmObject(), Serializable
+                @SerializedName("resourceURI") var image: String = "") : RealmObject()

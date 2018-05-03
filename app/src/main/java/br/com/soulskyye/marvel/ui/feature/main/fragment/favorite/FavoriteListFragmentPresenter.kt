@@ -54,8 +54,8 @@ class FavoriteListFragmentPresenter(private var view: FavoriteListFragmentContra
         }
     }
 
-    override fun onListItemClick(character: Character, imageView: View) {
-        view?.startDetailActivity(character, imageView)
+    override fun onListItemClick(character: Character?, characterId: String?, characterImage: String, imageView: View) {
+        view?.startDetailActivity(character, characterId, characterImage, imageView)
     }
 
 

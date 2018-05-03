@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorDetail"
+    android:background="@color/primaryDarkColor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/primaryDarkColor">
-
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarDetail"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -22,17 +22,16 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/primaryColor"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
         android:id="@+id/scrollViewCharacterDetail"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/primaryDarkColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarDetail">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@color/primaryDarkColor">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,76 +47,95 @@
                 android:transitionName="@string/transition_character_image"
                 app:srcCompat="@drawable/placeholder_character" />
 
-            <TextView
-                android:id="@+id/textViewCharacterDetailName"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieLoadingDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="22sp"
-                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewCharacterDetail"
-                tools:text="Wolverine" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_fileName="loading.json"/>
 
-            <TextView
-                android:id="@+id/textViewCharacterDetailDescription"
+            <LinearLayout
+                android:id="@+id/linearDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCharacterDetailName" />
+                android:visibility="gone"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewCharacterDetailComics"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="22sp"
-                android:fontFamily="sans-serif-medium"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewCharacterDetail"
-                android:text="Comics" />
+                <TextView
+                    android:id="@+id/textViewCharacterDetailName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewCharacterDetail"
+                    tools:text="Wolverine" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerViewComics"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCharacterDetailComics" />
+                <TextView
+                    android:id="@+id/textViewCharacterDetailDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCharacterDetailName" />
 
-            <TextView
-                android:id="@+id/textViewCharacterDetailSeries"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="22sp"
-                android:fontFamily="sans-serif-medium"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerViewComics"
-                android:text="Series" />
+                <TextView
+                    android:id="@+id/textViewCharacterDetailComics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="22sp"
+                    android:fontFamily="sans-serif-medium"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewCharacterDetail"
+                    android:text="Comics" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerViewSeries"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCharacterDetailSeries" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerViewComics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCharacterDetailComics" />
 
+                <TextView
+                    android:id="@+id/textViewCharacterDetailSeries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="22sp"
+                    android:fontFamily="sans-serif-medium"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewComics"
+                    android:text="Series" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerViewSeries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCharacterDetailSeries" />
+
+            </LinearLayout>
         </LinearLayout>
-
     </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

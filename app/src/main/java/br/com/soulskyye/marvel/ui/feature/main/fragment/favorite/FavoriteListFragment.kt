@@ -83,12 +83,12 @@ class FavoriteListFragment : Fragment(), FavoriteListFragmentContract.View, Swip
             list.addAll(characterList)
         }
 
-        adapter = CharacterListAdapter(list, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
+        adapter = CharacterListAdapter(list, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager), true)
         recyclerFavoriteList.adapter = adapter
     }
 
-    override fun startDetailActivity(character: Character, imageView: android.view.View) {
-        val intent = CharacterDetailActivity.newIntent(context!!, character)
+    override fun startDetailActivity(character: Character?, characterId: String?, characterImage: String, imageView: android.view.View) {
+        val intent = CharacterDetailActivity.newIntent(context!!, characterId, characterImage, character)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val p1 = Pair.create(imageView, getString(R.string.transition_character_image))
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity, p1)

@@ -6,4 +6,4 @@ import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import java.io.Serializable
 
-open class Items(@Ignore @SerializedName("items") var items: ArrayList<Item>? = ArrayList(), var x: Int = 1) : RealmObject(), Serializable
+open class Items(@SerializedName("items") var items: RealmList<Item> = RealmList()) : RealmObject()

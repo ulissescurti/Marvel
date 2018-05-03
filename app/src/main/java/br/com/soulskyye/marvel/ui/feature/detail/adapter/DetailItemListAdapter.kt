@@ -16,7 +16,7 @@ import br.com.soulskyye.marvel.ui.feature.main.fragment.base.BaseCharacterContra
 import br.com.soulskyye.marvel.utils.loadImage
 import br.com.soulskyye.marvel.utils.setPaletteColor
 
-class DetailItemListAdapter(var list: ArrayList<Item>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DetailItemListAdapter(var list: MutableList<Item>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount() = list.size
 
@@ -33,11 +33,9 @@ class DetailItemListAdapter(var list: ArrayList<Item>) : RecyclerView.Adapter<Re
         viewHolder.imageView.loadImage(item.image, R.drawable.placeholder_marvel, {})
     }
 
-
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         var textView: TextView = view.findViewById(R.id.textViewDetailItem)
         var imageView: AppCompatImageView = view.findViewById(R.id.imageViewDetailItem)
     }
-
 
 }

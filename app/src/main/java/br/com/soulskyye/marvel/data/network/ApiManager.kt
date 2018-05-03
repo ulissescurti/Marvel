@@ -115,4 +115,7 @@ class ApiManager: ApiService {
         return marvelService.getCharacters(limit, offset)
     }
 
+    override fun getCharacter(characterId: String): Single<CharactersResponse> {
+        return marvelService.getCharacter(characterId)
+    }
 }

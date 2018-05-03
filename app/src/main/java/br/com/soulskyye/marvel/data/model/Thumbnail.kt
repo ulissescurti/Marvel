@@ -5,4 +5,4 @@ import io.realm.RealmObject
 import java.io.Serializable
 
 open class Thumbnail(@SerializedName("path") var path: String? = "",
-                @SerializedName("extension") var extension: String? = "") : RealmObject(), Serializable
+                @SerializedName("extension") var extension: String? = "") : RealmObject()

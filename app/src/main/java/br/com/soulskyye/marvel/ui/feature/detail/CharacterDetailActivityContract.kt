@@ -10,11 +10,12 @@ interface CharacterDetailActivityContract {
         fun onFavoriteClick()
         fun updateFavoriteMenu()
 
+        fun onTryAgainClick()
     }
 
     interface View : BaseUiContract.View {
 
-        fun showImage(thumbnail: Thumbnail?)
+        fun showImage(image: String)
 
         fun showName(name: String)
 
@@ -26,6 +27,11 @@ interface CharacterDetailActivityContract {
         fun showSeries(items: List<Item>)
         fun hideSeries()
 
+        fun showLoading()
+        fun hideLoading()
+        fun showInternetError()
+        fun showGenericError()
+        fun hideTryAgain()
     }
 
 }

@@ -6,14 +6,14 @@ interface BaseCharacterContract {
 
     interface Presenter {
 
+        fun onListItemClick(character: Character?, characterId: String?, characterImage: String, imageView: android.view.View)
         fun onFavoriteClick(character: Character)
 
         fun refresh()
-        fun onListItemClick(character: Character, imageView: android.view.View)
     }
 
     interface View {
 
-        fun startDetailActivity(character: Character, imageView: android.view.View)
+        fun startDetailActivity(character: Character?, characterId: String?, characterImage: String, imageView: android.view.View)
     }
 }

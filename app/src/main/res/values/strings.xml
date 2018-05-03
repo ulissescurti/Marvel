@@ -5,8 +5,10 @@
 
     <string name="try_again">TRY AGAIN</string>
     <string name="try_again_internet_error">You must be connected to the internet to see the characters.</string>
-    <string name="try_again_generic_error">Something happened while we were looking for the characters.</string>
+    <string name="try_again_list_generic_error">Something happened while we were looking for the characters.</string>
+    <string name="try_again_detail_generic_error">Something happened while we were loading the character.</string>
 
     <string name="empty_favorites_message">Still do not have any favorite character? What a shame :(.</string>
     <string name="transition_character_image">characterImage</string>
+
 </resources>

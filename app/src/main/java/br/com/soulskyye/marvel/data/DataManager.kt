@@ -17,6 +17,10 @@ class DataManager(private val apiManager: ApiManager,
         return apiManager.getCharacters(limit, offset)
     }
 
+    override fun getCharacter(characterId: String): Single<CharactersResponse> {
+        return apiManager.getCharacter(characterId)
+    }
+
     override fun getFavorite(character: Character): Single<Character> {
         return databaseManager.getFavorite(character)
     }
