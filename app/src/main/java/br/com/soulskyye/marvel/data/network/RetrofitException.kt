@@ -41,21 +41,6 @@ class RetrofitException internal constructor(message: String?,
         UNEXPECTED
     }
 
-    /**
-     * HTTP response body converted to specified `type`. `null` if there is no
-     * response.
-     *
-     * @throws IOException if unable to convert the body to the specified `type`.
-     */
-    @Throws(IOException::class)
-    fun <T> getErrorBodyAs(type: Class<T>): T? {
-        if (response?.errorBody() == null) {
-            return null
-        }
-        val converter = retrofit?.responseBodyConverter<T>(type, arrayOfNulls(0))
-        return converter?.convert(response.errorBody()!!)
-    }
-
     companion object {
         fun httpError(url: String, response: Response<*>, retrofit: Retrofit): RetrofitException {
             val message = response.code().toString() + " " + response.message()
@@ -70,4 +55,5 @@ class RetrofitException internal constructor(message: String?,
             return RetrofitException(exception.message, null, null, Kind.UNEXPECTED, exception, null)
         }
     }
+
 }

@@ -32,19 +32,16 @@ import kotlinx.android.synthetic.main.fragment_character_list.*
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailActivityContract.View {
 
     companion object {
-        const val EXTRA_CHARACTER_ID = "EXTRA_CHARACTER_ID"
-        const val EXTRA_CHARACTER_IMAGE = "EXTRA_CHARACTER_IMAGE"
+        const val EXTRA_FROM_FAVORITE = "EXTRA_FROM_FAVORITE"
         const val EXTRA_CHARACTER = "EXTRA_CHARACTER"
 
         @JvmStatic
-        fun newIntent(context: Context, characterId: String?, characterImage: String, character: Character?): Intent {
+        fun newIntent(context: Context, character: Character?, isFromFavorite: Boolean): Intent {
 
             val intent = Intent(context, CharacterDetailActivity::class.java)
-            intent.putExtra(EXTRA_CHARACTER_ID, characterId)
-            intent.putExtra(EXTRA_CHARACTER_IMAGE, characterImage)
-            character?.let {
-                intent.putExtra(EXTRA_CHARACTER, Gson().toJson(character))
-            }
+            intent.putExtra(EXTRA_CHARACTER, Gson().toJson(character))
+            intent.putExtra(EXTRA_FROM_FAVORITE, isFromFavorite)
+
             return intent
         }
     }
@@ -62,11 +59,9 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailActivityCont
 
         setupActionBar()
 
-
         presenter = CharacterDetailActivityPresenter(this,
                 Gson().fromJson(intent.getStringExtra(EXTRA_CHARACTER), Character::class.java),
-                intent.getStringExtra(EXTRA_CHARACTER_ID),
-                intent.getStringExtra(EXTRA_CHARACTER_IMAGE),
+                intent.getBooleanExtra(EXTRA_FROM_FAVORITE, false),
                 DataManager(ApiManager(), DatabaseManager()))
         presenter?.start()
     }

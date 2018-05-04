@@ -30,7 +30,6 @@ class DetailItemListAdapter(var list: MutableList<Item>) : RecyclerView.Adapter<
         val viewHolder = holder as ViewHolder
 
         viewHolder.textView.text = item.name
-        viewHolder.imageView.loadImage(item.image, R.drawable.placeholder_marvel, {})
     }
 
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {

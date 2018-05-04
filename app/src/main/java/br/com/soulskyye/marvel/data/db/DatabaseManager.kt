@@ -1,16 +1,18 @@
 package br.com.soulskyye.marvel.data.db
 
 import br.com.soulskyye.marvel.data.model.Character
-import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.realm.Realm
-import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
-
+/**
+ * Implements the Database methods
+ */
 class DatabaseManager : DaoAccess {
 
+    /**
+     * Returns the character from realm based on its id
+     */
     override fun getFavorite(character: Character): Single<Character> {
         return Single.create<Character> { emitter ->
             Realm.getDefaultInstance().use { realm ->
@@ -19,21 +21,22 @@ class DatabaseManager : DaoAccess {
                         .findFirst()
                 try {
                     val char = realm.copyFromRealm(results)
-
-                    if(char == null) {
+                    if (char == null) {
                         emitter.onSuccess(character)
                     } else {
                         character.isFavorite = true
                         emitter.onSuccess(character)
                     }
-                } catch (exception: IllegalArgumentException){
-
+                } catch (exception: IllegalArgumentException) {
                     emitter.onSuccess(character)
                 }
             }
         }
     }
 
+    /**
+     * Returns the character list saved on realm
+     */
     override fun getFavorites(): Single<List<Character>> {
         return Single.create<List<Character>> { emitter ->
             Realm.getDefaultInstance().use { realm ->
@@ -41,38 +44,43 @@ class DatabaseManager : DaoAccess {
                         .findAll()
                 try {
                     val list = realm.copyFromRealm(results)
-
-                    if(list == null) {
+                    if (list == null) {
                         emitter.onSuccess(mutableListOf())
                     } else {
                         emitter.onSuccess(list)
                     }
-
-                } catch (exception: IllegalArgumentException){
+                } catch (exception: IllegalArgumentException) {
                     emitter.onSuccess(mutableListOf())
                 }
             }
         }
     }
 
+    /**
+     * Insert the given character on realm
+     */
     override fun insertFavorite(character: Character) {
         Realm.getDefaultInstance().executeTransaction { realm ->
             try {
                 realm.insert(character)
-            } catch (ex: Exception){
+            } catch (ex: Exception) {
 
             }
         }
     }
 
+    /**
+     *  Deletes the given character from realm
+     */
     override fun deleteFavorite(character: Character) {
         Realm.getDefaultInstance().executeTransaction { realm ->
             try {
                 val rows = realm.where(Character::class.java).equalTo("id", character.id).findAll()
                 rows.deleteAllFromRealm()
-            } catch (ex: Exception){
+            } catch (ex: Exception) {
 
             }
         }
     }
+
 }

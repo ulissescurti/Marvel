@@ -4,12 +4,8 @@ import br.com.soulskyye.marvel.ui.base.BaseUiContract
 
 interface MainActivityContract {
 
-    interface View : BaseUiContract.View {
+    interface View : BaseUiContract.View
 
-    }
-
-    interface Presenter : BaseUiContract.Presenter {
-
-    }
+    interface Presenter : BaseUiContract.Presenter
 
 }

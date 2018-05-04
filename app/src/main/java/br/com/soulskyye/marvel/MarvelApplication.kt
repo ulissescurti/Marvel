@@ -3,7 +3,7 @@ package br.com.soulskyye.marvel
 import android.app.Application
 import io.realm.Realm
 
-class MarvelApplication: Application() {
+class MarvelApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

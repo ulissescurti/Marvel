@@ -6,6 +6,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * Defines the HTTP methods
+ */
 interface ApiService {
 
     @GET("/v1/public/characters")
@@ -13,6 +16,6 @@ interface ApiService {
                       @Query("offset") offset: Int): Single<CharactersResponse>
 
     @GET("/v1/public/characters/{characterId}")
-    fun getCharacter(@Path("characterId")characterId: String): Single<CharactersResponse>
+    fun getCharacter(@Path("characterId") characterId: String): Single<CharactersResponse>
 
 }

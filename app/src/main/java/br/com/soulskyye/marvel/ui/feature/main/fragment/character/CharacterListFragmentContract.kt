@@ -7,7 +7,6 @@ import br.com.soulskyye.marvel.ui.feature.main.fragment.base.BaseCharacterContra
 interface CharacterListFragmentContract {
 
     interface View : BaseUiContract.View, BaseCharacterContract.View {
-
         fun addCharacters(results: ArrayList<Character>, isFiltering: Boolean)
         fun showLoading()
         fun hideLoading()
@@ -21,9 +20,7 @@ interface CharacterListFragmentContract {
     }
 
     interface Presenter : BaseUiContract.Presenter, BaseCharacterContract.Presenter {
-
         fun getCharacters(currentPage: Int)
-
         fun onTryAgainClick()
         fun performSearch(query: String?)
         fun canLoadMore(): Boolean

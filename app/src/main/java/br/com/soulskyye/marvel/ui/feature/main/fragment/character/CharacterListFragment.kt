@@ -32,15 +32,10 @@ import kotlinx.android.synthetic.main.fragment_character_list.*
 class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var presenter: CharacterListFragmentContract.Presenter
-
     private var adapter: CharacterListAdapter? = null
-
     private var animatorFooter: ValueAnimator? = null
-
     private var tryAgainSnackBar: Snackbar? = null
-
     private var searchView: SearchView? = null
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -60,24 +55,17 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
         inflater?.inflate(R.menu.main_menu, menu)
 
         val manager = activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
-
         searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
-
         searchView?.setSearchableInfo(manager.getSearchableInfo(activity?.componentName))
-
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
             override fun onQueryTextSubmit(query: String?): Boolean {
-
                 return true
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-
                 presenter.performSearch(query)
                 return true
             }
-
         })
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -94,7 +82,6 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
         val layoutManager = GridLayoutManager(context, 2)
         recyclerCharacterList.layoutManager = layoutManager
         recyclerCharacterList.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager) {
-
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                 presenter.getCharacters(page)
             }
@@ -118,16 +105,12 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
         presenter.refresh()
     }
 
-
-    /*
-        View Contract
-     */
     /**
      * Add the given results to the characters list
      */
     override fun addCharacters(results: ArrayList<Character>, isFiltering: Boolean) {
         if (adapter == null) {
-            adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager), false)
+            adapter = CharacterListAdapter(results, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
             recyclerCharacterList.adapter = adapter
         } else {
             adapter?.addItems(results, isFiltering)
@@ -152,7 +135,7 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
      * Refreshes the list of characters
      */
     override fun refreshCharacters(results: ArrayList<Character>) {
-        adapter = CharacterListAdapter(results, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager), false)
+        adapter = CharacterListAdapter(results, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
         recyclerCharacterList.adapter = adapter
     }
 
@@ -181,10 +164,9 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
         animatorFooter = ValueAnimator.ofFloat(0F, 1F)
         animatorFooter?.duration = 2000
 
-        val hsv: FloatArray
+        val hsv = FloatArray(3)
         var runColor: Int
 
-        hsv = FloatArray(3)
         hsv[1] = 1f
         hsv[2] = 1f
         animatorFooter?.addUpdateListener { animation ->
@@ -233,8 +215,8 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
         tryAgainSnackBar?.dismiss()
     }
 
-    override fun startDetailActivity(character: Character?, characterId: String?, characterImage: String, imageView: android.view.View) {
-        val intent = CharacterDetailActivity.newIntent(context!!, characterId, characterImage, character)
+    override fun startDetailActivity(character: Character?, imageView: android.view.View) {
+        val intent = CharacterDetailActivity.newIntent(context!!, character, false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val p1 = Pair.create(imageView, getString(R.string.transition_character_image))
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity, p1)
@@ -244,10 +226,6 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
         }
     }
 
-
-    /*
-        Util
-     */
     private fun showError(message: Int) {
         tryAgainSnackBar = Snackbar
                 .make(coordinatorCharacterList, message, Snackbar.LENGTH_INDEFINITE)
@@ -260,4 +238,5 @@ class CharacterListFragment : Fragment(), CharacterListFragmentContract.View, Sw
 
         tryAgainSnackBar?.show()
     }
+
 }

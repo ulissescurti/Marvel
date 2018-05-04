@@ -9,7 +9,7 @@ import com.squareup.picasso.Picasso
 import java.lang.Exception
 
 /**
- * Method to load image into ImageView using picasso
+ * Extension method to load image into ImageView using picasso
  */
 fun AppCompatImageView.loadImage(url: String?, placeholder: Int, callback: (Bitmap) -> Unit) {
     if (url != null && url.isNotBlank()) {

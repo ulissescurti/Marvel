@@ -10,7 +10,7 @@ import br.com.soulskyye.marvel.ui.feature.main.fragment.favorite.FavoriteListFra
 import java.util.*
 
 class ViewPagerAdapter(private val context: Context,
-                       private val manager: FragmentManager) : FragmentStatePagerAdapter(manager) {
+                       manager: FragmentManager) : FragmentStatePagerAdapter(manager) {
 
     private val mFragmentsList: MutableList<Fragment> by lazy {
         ArrayList<Fragment>()

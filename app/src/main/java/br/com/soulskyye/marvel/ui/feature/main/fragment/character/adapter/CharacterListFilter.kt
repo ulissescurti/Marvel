@@ -4,7 +4,7 @@ import android.widget.Filter
 import br.com.soulskyye.marvel.data.model.Character
 
 class CharacterListFilter(var filterList: ArrayList<Character>,
-                          var adapter: CharacterListAdapter): Filter() {
+                          var adapter: CharacterListAdapter) : Filter() {
 
     override fun performFiltering(constraint: CharSequence?): FilterResults {
         val results = Filter.FilterResults()
@@ -12,7 +12,6 @@ class CharacterListFilter(var filterList: ArrayList<Character>,
         val query = constraint?.toString()?.toUpperCase()
 
         if (query != null && query.isNotEmpty()) {
-
             val filteredList = ArrayList<Character>()
 
             for (i in 0 until filterList.size) {
@@ -23,7 +22,6 @@ class CharacterListFilter(var filterList: ArrayList<Character>,
 
             results.count = filteredList.size
             results.values = filteredList
-
         } else {
             results.count = filterList.size
             results.values = filterList

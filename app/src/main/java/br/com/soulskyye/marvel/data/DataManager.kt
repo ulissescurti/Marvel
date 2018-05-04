@@ -7,7 +7,6 @@ import br.com.soulskyye.marvel.data.network.ApiManager
 import br.com.soulskyye.marvel.data.network.ApiService
 import br.com.soulskyye.marvel.data.network.RetrofitException
 import br.com.soulskyye.marvel.data.network.model.CharactersResponse
-import io.reactivex.Flowable
 import io.reactivex.Single
 
 class DataManager(private val apiManager: ApiManager,

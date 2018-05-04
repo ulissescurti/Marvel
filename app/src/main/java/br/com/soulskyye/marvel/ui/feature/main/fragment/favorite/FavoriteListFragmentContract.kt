@@ -8,11 +8,8 @@ interface FavoriteListFragmentContract {
 
     interface View : BaseUiContract.View, BaseCharacterContract.View {
         fun showFavorites(characterList: List<Character>)
-
     }
 
-    interface Presenter : BaseUiContract.Presenter, BaseCharacterContract.Presenter {
-
-    }
+    interface Presenter : BaseUiContract.Presenter, BaseCharacterContract.Presenter
 
 }

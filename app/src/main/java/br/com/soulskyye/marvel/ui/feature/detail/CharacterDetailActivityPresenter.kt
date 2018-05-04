@@ -10,26 +10,23 @@ import io.reactivex.schedulers.Schedulers
 
 
 class CharacterDetailActivityPresenter(private var view: CharacterDetailActivityContract.View?,
-                                       private var offlineCharacter: Character?,
-                                       private var characterId: String?,
-                                       private var characterImage: String,
+                                       private var character: Character,
+                                       private var isFromFavorite: Boolean,
                                        private var dataManager: DataManager) : CharacterDetailActivityContract.Presenter {
 
     private val compositeDisposable by lazy { CompositeDisposable() }
-
-    private var character: Character? = null
 
     /*
         Presenter Contract
      */
     override fun start() {
-        view?.showImage(characterImage)
-        if(characterId != null){
-            requestCharacter()
-        } else {
-            character = offlineCharacter
+        view?.showImage("${character.thumbnail?.path}.${character.thumbnail?.extension}")
+
+        if(isFromFavorite){
             view?.hideLoading()
             showDetails()
+        } else {
+            requestCharacter()
         }
     }
 
@@ -39,7 +36,7 @@ class CharacterDetailActivityPresenter(private var view: CharacterDetailActivity
     }
 
     override fun updateFavoriteMenu() {
-        if(character != null && character!!.isFavorite){
+        if(character.isFavorite){
             view?.showFavoriteIcon()
         } else {
             view?.showFavoriteEmptyIcon()
@@ -47,13 +44,13 @@ class CharacterDetailActivityPresenter(private var view: CharacterDetailActivity
     }
 
     override fun onFavoriteClick() {
-        if(character?.isFavorite!!) {
-            character?.isFavorite = false
-            dataManager.deleteFavorite(character!!)
+        if(character.isFavorite) {
+            character.isFavorite = false
+            dataManager.deleteFavorite(character)
             view?.showFavoriteEmptyIcon()
         } else {
-            character?.isFavorite = true
-            dataManager.insertFavorite(character!!)
+            character.isFavorite = true
+            dataManager.insertFavorite(character)
             view?.showFavoriteIcon()
         }
     }
@@ -61,7 +58,7 @@ class CharacterDetailActivityPresenter(private var view: CharacterDetailActivity
     private fun requestCharacter(){
         view?.showLoading()
 
-        val disposable = dataManager.getCharacter(characterId!!)
+        val disposable = dataManager.getCharacter(character.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onFetchCharacterSuccess, this::onFetchCharactersError)
@@ -78,7 +75,9 @@ class CharacterDetailActivityPresenter(private var view: CharacterDetailActivity
         view?.hideLoading()
 
         if(response.data?.results?.isNotEmpty()!!) {
+            val isFavorite = character.isFavorite
             character = response.data?.results!![0]
+            character.isFavorite = isFavorite
             showDetails()
         }
     }
@@ -97,15 +96,15 @@ class CharacterDetailActivityPresenter(private var view: CharacterDetailActivity
 
     private fun showDetails(){
         updateFavoriteMenu()
-        view?.showName(character?.name!!)
-        view?.showDescription(character?.description!!)
-        if(character?.comics?.items?.isNotEmpty()!!){
-            view?.showComics(character?.comics?.items!!)
+        view?.showName(character.name)
+        view?.showDescription(character.description)
+        if(character.comics?.items?.isNotEmpty()!!){
+            view?.showComics(character.comics?.items!!)
         } else {
             view?.hideComics()
         }
-        if(character?.series?.items?.isNotEmpty()!!){
-            view?.showSeries(character?.series?.items!!)
+        if(character.series?.items?.isNotEmpty()!!){
+            view?.showSeries(character.series?.items!!)
         } else {
             view?.hideSeries()
         }

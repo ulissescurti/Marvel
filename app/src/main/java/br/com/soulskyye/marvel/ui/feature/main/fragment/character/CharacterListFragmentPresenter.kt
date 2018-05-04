@@ -14,17 +14,14 @@ import io.reactivex.schedulers.Schedulers
 class CharacterListFragmentPresenter(private var view: CharacterListFragmentContract.View?,
                                      private var dataManager: DataManager) : CharacterListFragmentContract.Presenter {
 
-
     object Action {
         const val GET_CHARACTERS = 0
         const val REFRESH = 1
     }
 
-    var list: ArrayList<Character>? = null
-
+    private var list: ArrayList<Character>? = null
     private var page = 0
     private var currentAction = Action.GET_CHARACTERS
-
     private var currentSearchTerm = ""
 
     private val compositeDisposable by lazy {
@@ -40,17 +37,17 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
         compositeDisposable.dispose()
     }
 
-    override fun getCharacters(currentPage: Int){
+    override fun getCharacters(currentPage: Int) {
         currentAction = Action.GET_CHARACTERS
 
         page = currentPage
-        if(currentPage == 0) {
+        if (currentPage == 0) {
             view?.showLoading()
         } else {
             view?.showLoadingFooter()
         }
 
-        val disposable = dataManager.getCharacters(REQUEST_LIMIT, currentPage*REQUEST_LIMIT)
+        val disposable = dataManager.getCharacters(REQUEST_LIMIT, currentPage * REQUEST_LIMIT)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onFetchCharactersSuccess, this::onFetchCharactersError)
@@ -79,7 +76,7 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
     override fun performSearch(query: String?) {
         currentSearchTerm = ""
         query?.let {
-            if(it.isNotBlank()) {
+            if (it.isNotBlank()) {
                 currentSearchTerm = it
                 view?.searchTerm(query)
             } else {
@@ -89,9 +86,7 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
         }
     }
 
-    override fun canLoadMore(): Boolean {
-        return currentSearchTerm.isBlank()
-    }
+    override fun canLoadMore() = currentSearchTerm.isBlank()
 
     override fun onTryAgainClick() {
         view?.hideTryAgain()
@@ -108,26 +103,21 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
 
     override fun onFavoriteClick(character: Character) {
         character.isFavorite = !character.isFavorite
-        if(character.isFavorite){
+        if (character.isFavorite) {
             dataManager.insertFavorite(character)
         } else {
             dataManager.deleteFavorite(character)
         }
     }
 
-    override fun onListItemClick(character: Character?, characterId: String?, characterImage: String, imageView: View) {
-        view?.startDetailActivity(character, characterId, characterImage, imageView)
+    override fun onListItemClick(character: Character?, imageView: View) {
+        view?.startDetailActivity(character, imageView)
     }
 
-
-    /*
-                    Callbacks
-                 */
-    private fun onFetchCharactersSuccess(response: CharactersResponse){
+    private fun onFetchCharactersSuccess(response: CharactersResponse) {
         view?.hideLoading()
 
-        if(response.data?.results?.isNotEmpty()!!){
-
+        if (response.data?.results?.isNotEmpty()!!) {
             val disposable = Observable.just(response.data?.results)
                     .flatMapIterable { character -> character }
                     .subscribeOn(Schedulers.io())
@@ -137,8 +127,8 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
                     }
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .toList()
-                    .subscribe{
-                        _, _ -> run {
+                    .subscribe { _, _ ->
+                        run {
                             if (list == null) {
                                 list = ArrayList()
                             }
@@ -148,11 +138,10 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
                     }
 
             compositeDisposable.add(disposable)
-
         }
     }
 
-    private fun onFetchCharactersError(error: Throwable){
+    private fun onFetchCharactersError(error: Throwable) {
         val exception = dataManager.asRetrofitException(error)
 
         if (exception.kind == RetrofitException.Kind.NETWORK && exception.message != "timeout") {
@@ -164,11 +153,10 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
         view?.hideLoading()
     }
 
-    private fun onFetchRefreshCharactersSuccess(response: CharactersResponse){
+    private fun onFetchRefreshCharactersSuccess(response: CharactersResponse) {
         view?.hideLoading()
 
-        if(response.data?.results?.isNotEmpty()!!){
-
+        if (response.data?.results?.isNotEmpty()!!) {
             val disposable = Observable.just(response.data?.results)
                     .flatMapIterable { character -> character }
                     .subscribeOn(Schedulers.io())
@@ -178,8 +166,8 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
                     }
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .toList()
-                    .subscribe{
-                        _, _ -> run {
+                    .subscribe { _, _ ->
+                        run {
                             if (list == null) {
                                 list = ArrayList()
                             }
@@ -189,7 +177,6 @@ class CharacterListFragmentPresenter(private var view: CharacterListFragmentCont
                     }
 
             compositeDisposable.add(disposable)
-
         }
     }
 

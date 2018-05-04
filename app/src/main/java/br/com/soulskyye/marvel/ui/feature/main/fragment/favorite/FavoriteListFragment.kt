@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_favorite_list.*
 class FavoriteListFragment : Fragment(), FavoriteListFragmentContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var presenter: FavoriteListFragmentContract.Presenter
-
     private var adapter: CharacterListAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -79,16 +78,16 @@ class FavoriteListFragment : Fragment(), FavoriteListFragmentContract.View, Swip
         }
 
         val list = ArrayList<Character>()
-        if(characterList.isNotEmpty()) {
+        if (characterList.isNotEmpty()) {
             list.addAll(characterList)
         }
 
-        adapter = CharacterListAdapter(list, context, presenter, ScreenUtils.getScreenWidth(activity?.windowManager), true)
+        adapter = CharacterListAdapter(list, presenter, ScreenUtils.getScreenWidth(activity?.windowManager))
         recyclerFavoriteList.adapter = adapter
     }
 
-    override fun startDetailActivity(character: Character?, characterId: String?, characterImage: String, imageView: android.view.View) {
-        val intent = CharacterDetailActivity.newIntent(context!!, characterId, characterImage, character)
+    override fun startDetailActivity(character: Character?, imageView: android.view.View) {
+        val intent = CharacterDetailActivity.newIntent(context!!, character, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val p1 = Pair.create(imageView, getString(R.string.transition_character_image))
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity, p1)
@@ -97,4 +96,5 @@ class FavoriteListFragment : Fragment(), FavoriteListFragmentContract.View, Swip
             startActivity(intent)
         }
     }
+
 }

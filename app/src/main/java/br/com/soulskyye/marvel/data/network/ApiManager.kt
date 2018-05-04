@@ -14,17 +14,16 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-
 /**
  * The class responsible to make the Marvel Api requests.
  */
-class ApiManager: ApiService {
+class ApiManager : ApiService {
 
     private val retrofit by lazy {
         createRetrofit()
     }
 
-    val marvelService: ApiService by lazy {
+    private val marvelService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }
 
@@ -82,7 +81,6 @@ class ApiManager: ApiService {
         return GsonConverterFactory.create(gson)
     }
 
-
     fun asRetrofitException(throwable: Throwable): RetrofitException {
         // We had non-200 http error
         if (throwable is HttpException) {
@@ -93,9 +91,6 @@ class ApiManager: ApiService {
         return if (throwable is IOException) {
             RetrofitException.networkError(throwable)
         } else RetrofitException.unexpectedError(throwable)
-
-        // We don't know what happened. We need to simply convert to an unknown error
-
     }
 
     /**
@@ -108,8 +103,8 @@ class ApiManager: ApiService {
     }
 
 
-    /**
-     * Marvel Api Requests
+    /*
+        Marvel Api Requests
      */
     override fun getCharacters(limit: Int, offset: Int): Single<CharactersResponse> {
         return marvelService.getCharacters(limit, offset)
@@ -118,4 +113,5 @@ class ApiManager: ApiService {
     override fun getCharacter(characterId: String): Single<CharactersResponse> {
         return marvelService.getCharacter(characterId)
     }
+
 }
